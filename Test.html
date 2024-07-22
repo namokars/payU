@@ -15,9 +15,9 @@
         </div>
         <div id="paymentLinkContainer">
             <h2>Your Payment Link:</h2>
-            <!-- Button to display payment link -->
-            <button onclick="showPaymentLink()">Show Payment Link</button>
-            <p id="paymentLink" style="display: none;">https://example.com/payment</p>
+            <button onclick="generateAndDisplayShortenedLink()">Generate Short Link</button>
+            <p id="shortenedLink" style="display: none;"></p>
+            <button onclick="copyShortenedLink()">Copy Short Link</button>
         </div>
         <div id="paymentAppsContainer">
             <h2>Pay Using:</h2>
@@ -32,11 +32,48 @@
         </div>
     </div>
 
-    <script src="script.js"></script>
     <script>
-        function showPaymentLink() {
-            var paymentLinkElement = document.getElementById('paymentLink');
-            paymentLinkElement.style.display = 'block'; // Show the payment link
+        function generateAndDisplayShortenedLink() {
+            var currentUrl = window.location.href; // Get current page URL (payment.html in this case)
+
+            const url = 'https://spoo.me/';
+            const data = new URLSearchParams();
+            data.append('url', currentUrl);
+            data.append('alias', ''); // Optional: Specify a custom alias if needed
+            data.append('password', ''); // Optional: Add a password to protect the link
+            data.append('max-clicks', ''); // Optional: Limit maximum clicks on the shortened link
+
+            const xhr = new XMLHttpRequest();
+            xhr.open('POST', url, true);
+            xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+            xhr.setRequestHeader('Accept', 'application/json');
+
+            xhr.onreadystatechange = function () {
+                if (xhr.readyState == 4) {
+                    if (xhr.status == 200) {
+                        var response = JSON.parse(xhr.responseText);
+                        var shortenedUrl = response.shortened;
+                        var shortenedLinkElement = document.getElementById('shortenedLink');
+                        shortenedLinkElement.textContent = shortenedUrl;
+                        shortenedLinkElement.style.display = 'block';
+                    } else {
+                        console.error(`HTTP error! Status: ${xhr.status}`);
+                    }
+                }
+            };
+
+            xhr.send(data);
+        }
+
+        function copyShortenedLink() {
+            var shortenedLinkElement = document.getElementById('shortenedLink');
+            var tempInput = document.createElement('input');
+            tempInput.value = shortenedLinkElement.textContent;
+            document.body.appendChild(tempInput);
+            tempInput.select();
+            document.execCommand('copy');
+            document.body.removeChild(tempInput);
+            alert('Shortened link copied to clipboard!');
         }
     </script>
 </body>
