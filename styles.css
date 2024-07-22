@@ -86,58 +86,6 @@ button:hover {
     border: 1px solid #ccc;
     word-wrap: break-word;
 }
-body {
-    font-family: Arial, sans-serif;
-    background-color: #f0f0f0;
-    margin: 0;
-    padding: 0;
-}
-
-.container {
-    max-width: 600px;
-    margin: 50px auto;
-    background-color: #fff;
-    padding: 20px;
-    border-radius: 8px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    text-align: center;
-}
-
-h1, h2 {
-    color: #333;
-}
-
-#qrCodeContainer {
-    margin-top: 30px;
-}
-
-#qrCode {
-    display: inline-block;
-    padding: 10px;
-    background-color: #fff;
-    border-radius: 8px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-}
-
-#qrCode img {
-    max-width: 100%;
-    height: auto;
-    border: 1px solid #ccc;
-    border-radius: 8px;
-}
-
-#paymentLinkContainer {
-    margin-top: 20px;
-}
-
-#paymentLink {
-    font-size: 18px;
-    background-color: #f9f9f9;
-    padding: 10px;
-    border-radius: 4px;
-    border: 1px solid #ccc;
-    word-wrap: break-word;
-}
 
 #paymentAppsContainer {
     margin-top: 30px;
@@ -147,15 +95,19 @@ h1, h2 {
     display: flex;
     justify-content: center;
     align-items: center;
+    flex-wrap: wrap; /* Allow items to wrap to the next line */
 }
 
 .paymentApps a {
     display: inline-block;
     margin: 10px;
+    text-align: center; /* Center-align items */
+    flex-basis: 45%; /* Adjust based on the number of items per row */
+    max-width: 150px; /* Limit maximum width of each item */
 }
 
 .paymentApps img {
-    width: 100px; /* Adjust size as needed */
+    width: 100%; /* Adjust size of image */
     height: auto;
     border-radius: 8px;
     cursor: pointer;
