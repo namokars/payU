@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UPI Payment</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <h1>UPI Payment</h1>
+        <div id="qrCodeContainer">
+            <h2>Scan QR Code to Pay</h2>
+            <div id="qrCode"></div>
+        </div>
+        <div id="paymentLinkContainer">
+            <h2>Your Payment Link:</h2>
+            <p id="paymentLink"></p>
+        </div>
+        <div id="paymentAppsContainer">
+            <h2>Pay Using:</h2>
+            <div class="paymentApps">
+                <a href="#"><img src="images/bhim.svg" alt="BHIM"></a>
+                <a href="#"><img src="images/phonepe.svg" alt="PhonePe"></a>
+                <a href="#"><img src="images/paytm.svg" alt="Paytm"></a>
+                <a href="#"><img src="images/gpay.svg" alt="GPay"></a>
+                <a href="#"><img src="images/upi.svg" alt="UPI"></a>
+                <!-- Add more payment app icons as needed -->
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
