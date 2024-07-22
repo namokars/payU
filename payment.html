@@ -15,7 +15,9 @@
         </div>
         <div id="paymentLinkContainer">
             <h2>Your Payment Link:</h2>
-            <p id="paymentLink"></p>
+            <!-- Button to display payment link -->
+            <button onclick="showPaymentLink()">Show Payment Link</button>
+            <p id="paymentLink" style="display: none;">https://example.com/payment</p>
         </div>
         <div id="paymentAppsContainer">
             <h2>Pay Using:</h2>
@@ -31,5 +33,11 @@
     </div>
 
     <script src="script.js"></script>
+    <script>
+        function showPaymentLink() {
+            var paymentLinkElement = document.getElementById('paymentLink');
+            paymentLinkElement.style.display = 'block'; // Show the payment link
+        }
+    </script>
 </body>
 </html>
