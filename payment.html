@@ -13,12 +13,6 @@
             <h2>Scan QR Code to Pay</h2>
             <div id="qrCode"></div>
         </div>
-        <div id="paymentLinkContainer">
-            <h2>Your Payment Link:</h2>
-            <!-- Button to display payment link -->
-            <button onclick="showPaymentLink()">Show Payment Link</button>
-            <p id="paymentLink" style="display: none;">https://example.com/payment</p>
-        </div>
         <div id="paymentAppsContainer">
             <h2>Pay Using:</h2>
             <div class="paymentApps">
@@ -30,13 +24,16 @@
                 <!-- Add more payment app icons as needed -->
             </div>
         </div>
+        <div id="markAsDoneContainer">
+            <button class="mark-done-btn" onclick="markAsDone()">Mark as Done</button>
+        </div>
     </div>
 
     <script src="script.js"></script>
     <script>
-        function showPaymentLink() {
-            var paymentLinkElement = document.getElementById('paymentLink');
-            paymentLinkElement.style.display = 'block'; // Show the payment link
+        function markAsDone() {
+            // Redirect to the successful page
+            window.location.href = 'successful.html';
         }
     </script>
 </body>
