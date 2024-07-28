@@ -132,4 +132,34 @@ footer p {
     font-size: 14px;
     color: #333;
 }
+/* Container for the button */
+#markAsDoneContainer {
+    text-align: center;
+    margin-top: 20px;
+}
+
+/* Style for the Mark as Done button */
+.mark-done-btn {
+    background: linear-gradient(135deg, #6ab04c, #3a9d23); /* Gradient background */
+    border: none;
+    color: white;
+    font-size: 16px;
+    padding: 15px 30px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease; /* Smooth transition for hover effect */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Subtle shadow */
+    font-weight: bold;
+}
+
+.mark-done-btn:hover {
+    background: linear-gradient(135deg, #3a9d23, #6ab04c); /* Reverse gradient on hover */
+    transform: translateY(-3px); /* Lift effect */
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3); /* Enhanced shadow on hover */
+}
+
+.mark-done-btn:focus {
+    outline: none;
+    box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.2); /* Focus outline */
+}
 
