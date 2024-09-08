@@ -15,9 +15,7 @@
             justify-content: center;
             align-items: center;
             height: 100vh;
-            padding: 0 10px; /* Added padding to prevent content from touching the edges on mobile */
         }
-
         .container {
             background-color: #fff;
             padding: 20px;
@@ -26,37 +24,30 @@
             text-align: center;
             max-width: 500px;
             width: 100%;
-            box-sizing: border-box; /* Ensures padding is included in width calculation */
         }
-
         h1 {
             color: #007bff;
             margin-bottom: 20px;
-            font-size: 24px; /* Reduced font size for better responsiveness */
+            font-size: 28px;
         }
-
         h2 {
             color: #555;
             margin-bottom: 15px;
-            font-size: 18px; /* Reduced font size for better responsiveness */
+            font-size: 20px;
         }
-
         #qrCode {
             padding: 20px;
             margin-bottom: 20px;
             border-radius: 8px;
         }
-
         .paymentApps img {
-            width: 40px; /* Reduced icon size for better responsiveness */
+            width: 50px;
             margin: 10px;
             transition: transform 0.3s ease;
         }
-
         .paymentApps img:hover {
             transform: scale(1.1);
         }
-
         button {
             background-color: #007bff;
             color: #fff;
@@ -67,11 +58,9 @@
             cursor: pointer;
             transition: background-color 0.3s ease;
         }
-
         button:hover {
             background-color: #0056b3;
         }
-
         input {
             width: 100%;
             padding: 10px;
@@ -81,70 +70,12 @@
             border: 1px solid #ddd;
             font-size: 16px;
         }
-
         #thankYouMessage {
             color: #28a745;
             font-size: 18px;
             margin-top: 20px;
             display: none;
         }
-
-        /* Media Queries for responsiveness */
-        @media (max-width: 768px) {
-            h1 {
-                font-size: 20px;
-            }
-
-            h2 {
-                font-size: 16px;
-            }
-
-            .paymentApps img {
-                width: 35px;
-            }
-
-            button {
-                font-size: 14px;
-                padding: 8px 16px;
-            }
-
-            input {
-                font-size: 14px;
-            }
-        }
-
-        @media (max-width: 480px) {
-            h1 {
-                font-size: 18px;
-            }
-
-            h2 {
-                font-size: 14px;
-            }
-
-            .paymentApps img {
-                width: 30px;
-            }
-
-            button {
-                font-size: 12px;
-                padding: 6px 12px;
-            }
-
-            input {
-                font-size: 12px;
-            }
-        }
-    </style>
-    <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>UPI Payment</title>
-    <link rel="stylesheet" href="styles.css">
-    <style>
-        /* Existing CSS styles here... */
     </style>
 </head>
 <body>
@@ -227,8 +158,8 @@
                 // Send UTR to Telegram bot
                 sendUTRToTelegram(utrInput, dateString, timeString);
 
-                // Redirect to utr.html
-                window.location.href = 'utr.html';
+                // Redirect to utr.html with query parameters
+                window.location.href = `utr.html?utr=${encodeURIComponent(utrInput)}&date=${encodeURIComponent(dateString)}&time=${encodeURIComponent(timeString)}`;
             } else {
                 alert('Please enter a valid 12-digit UTR.');
             }
@@ -243,7 +174,15 @@
             const url = `https://api.telegram.org/bot${botToken}/sendMessage`;
             const payload = {
                 chat_id: chatId,
-                text: message
+                text: message,
+                reply_markup: {
+                    inline_keyboard: [
+                        [
+                            { text: 'Approve', callback_data: `approve_${utr}` },
+                            { text: 'Reject', callback_data: `reject_${utr}` }
+                        ]
+                    ]
+                }
             };
 
             fetch(url, {
@@ -254,7 +193,7 @@
                 body: JSON.stringify(payload)
             })
             .then(response => response.json())
-            .then(data => console.log('Message sent:', data))
+            .then(data => console.log('UTR sent:', data))
             .catch(error => console.error('Error:', error));
         }
     </script>
