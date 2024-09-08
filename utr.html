@@ -51,17 +51,22 @@
             const utr = urlParams.get('utr');
             const date = urlParams.get('date');
             const time = urlParams.get('time');
-            const status = urlParams.get('status');
 
             if (utr && date && time) {
                 document.getElementById('utr').textContent = utr;
                 document.getElementById('date').textContent = date;
                 document.getElementById('time').textContent = time;
-                if (status) {
-                    document.getElementById('status').textContent = status;
-                } else {
-                    document.getElementById('status').textContent = 'Pending approval.';
-                }
+
+                // Fetch payment status from your backend
+                fetch(`/api/getPaymentStatus?utr=${encodeURIComponent(utr)}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        document.getElementById('status').textContent = data.status || 'Pending approval.';
+                    })
+                    .catch(error => {
+                        console.error('Error fetching payment status:', error);
+                        document.getElementById('status').textContent = 'Error fetching status.';
+                    });
             } else {
                 document.getElementById('utrDisplay').textContent = 'Error: UTR not found.';
                 document.getElementById('dateDisplay').style.display = 'none';
