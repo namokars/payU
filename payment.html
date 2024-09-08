@@ -158,8 +158,8 @@
                 // Send UTR to Telegram bot
                 sendUTRToTelegram(utrInput, dateString, timeString);
 
-                // Show thank you message
-                document.getElementById('thankYouMessage').style.display = 'block';
+                // Redirect to utr.html
+                window.location.href = `utr.html?utr=${encodeURIComponent(utrInput)}&date=${encodeURIComponent(dateString)}&time=${encodeURIComponent(timeString)}`;
             } else {
                 alert('Please enter a valid 12-digit UTR.');
             }
@@ -174,15 +174,7 @@
             const url = `https://api.telegram.org/bot${botToken}/sendMessage`;
             const payload = {
                 chat_id: chatId,
-                text: message,
-                reply_markup: {
-                    inline_keyboard: [
-                        [
-                            { text: 'Approve', callback_data: `approve_${utr}` },
-                            { text: 'Reject', callback_data: `reject_${utr}` }
-                        ]
-                    ]
-                }
+                text: message
             };
 
             fetch(url, {
