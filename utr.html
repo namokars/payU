@@ -33,6 +33,7 @@
         }
         #statusDisplay {
             font-weight: bold;
+            margin-top: 20px;
         }
     </style>
 </head>
@@ -57,8 +58,10 @@
                 document.getElementById('date').textContent = date;
                 document.getElementById('time').textContent = time;
 
-                // Fetch payment status from your backend
-                fetch(`/api/getPaymentStatus?utr=${encodeURIComponent(utr)}`)
+                // Update the URL to point to your actual backend service
+                const apiUrl = `http://localhost:3000/api/getPaymentStatus?utr=${encodeURIComponent(utr)}`;
+
+                fetch(apiUrl)
                     .then(response => response.json())
                     .then(data => {
                         document.getElementById('status').textContent = data.status || 'Pending approval.';
