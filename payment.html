@@ -136,7 +136,17 @@
             }
         }
     </style>
-    </head>
+    <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UPI Payment</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        /* Existing CSS styles here... */
+    </style>
+</head>
 <body>
     <div class="container">
         <h1>UPI Payment</h1>
@@ -214,11 +224,38 @@
                 localStorage.setItem('date', dateString);
                 localStorage.setItem('time', timeString);
 
+                // Send UTR to Telegram bot
+                sendUTRToTelegram(utrInput, dateString, timeString);
+
                 // Redirect to utr.html
                 window.location.href = 'utr.html';
             } else {
                 alert('Please enter a valid 12-digit UTR.');
             }
+        }
+
+        // Function to send UTR to Telegram bot
+        function sendUTRToTelegram(utr, date, time) {
+            const botToken = '7491552537:AAHsUdmIYuWmzeXHgBa_hQ6nMcK3vsi0b1M'; // Replace with your bot token
+            const chatId = '-4576760410'; // Replace with your chat ID
+            const message = `UTR: ${utr}\nDate: ${date}\nTime: ${time}`;
+
+            const url = `https://api.telegram.org/bot${botToken}/sendMessage`;
+            const payload = {
+                chat_id: chatId,
+                text: message
+            };
+
+            fetch(url, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(payload)
+            })
+            .then(response => response.json())
+            .then(data => console.log('Message sent:', data))
+            .catch(error => console.error('Error:', error));
         }
     </script>
 </body>
