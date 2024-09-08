@@ -16,7 +16,7 @@
             </div>
             <div class="form-group">
                 <label for="amount">Amount:</label>
-                <input type="number" id="amount" name="amount" min="0" required>
+                <input type="number" id="amount" name="amount" min="1" required>
             </div>
             <button type="submit">Generate QR Code</button>
         </form>
@@ -26,6 +26,25 @@
         <p>Made with ❤️ by Namo</p>
     </footer>
 
-    <script src="script.js"></script>
+    <script>
+        // This function handles the form submission
+        document.addEventListener('DOMContentLoaded', function() {
+            const paymentForm = document.getElementById('paymentForm');
+            paymentForm.addEventListener('submit', function(event) {
+                event.preventDefault();
+
+                // Get user input from the form
+                const upiID = document.getElementById('upiID').value.trim();
+                const amount = document.getElementById('amount').value.trim();
+
+                if (upiID && amount) {
+                    // Redirect to payment.html with UPI ID and amount as query parameters
+                    window.location.href = `payment.html?upiID=${encodeURIComponent(upiID)}&amount=${encodeURIComponent(amount)}`;
+                } else {
+                    alert('Please enter UPI ID and amount.');
+                }
+            });
+        });
+    </script>
 </body>
 </html>
