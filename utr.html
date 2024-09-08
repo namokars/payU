@@ -31,6 +31,9 @@
         p {
             font-size: 18px;
         }
+        #statusDisplay {
+            font-weight: bold;
+        }
     </style>
 </head>
 <body>
@@ -39,29 +42,32 @@
         <p id="utrDisplay">UTR: <span id="utr"></span></p>
         <p id="dateDisplay">Date: <span id="date"></span></p>
         <p id="timeDisplay">Time: <span id="time"></span></p>
+        <p id="statusDisplay">Status: <span id="status"></span></p>
     </div>
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            // Retrieve UTR and details from localStorage
-            const utr = localStorage.getItem('utr');
-            const date = localStorage.getItem('date');
-            const time = localStorage.getItem('time');
+            const urlParams = new URLSearchParams(window.location.search);
+            const utr = urlParams.get('utr');
+            const date = urlParams.get('date');
+            const time = urlParams.get('time');
+            const status = urlParams.get('status');
 
             if (utr && date && time) {
                 document.getElementById('utr').textContent = utr;
                 document.getElementById('date').textContent = date;
                 document.getElementById('time').textContent = time;
+                if (status) {
+                    document.getElementById('status').textContent = status;
+                } else {
+                    document.getElementById('status').textContent = 'Pending approval.';
+                }
             } else {
                 document.getElementById('utrDisplay').textContent = 'Error: UTR not found.';
                 document.getElementById('dateDisplay').style.display = 'none';
                 document.getElementById('timeDisplay').style.display = 'none';
+                document.getElementById('statusDisplay').style.display = 'none';
             }
-
-            // Clear the stored values after displaying
-            localStorage.removeItem('utr');
-            localStorage.removeItem('date');
-            localStorage.removeItem('time');
         });
     </script>
 </body>
