@@ -5,6 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>UPI Payment</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Add QRCode.js library -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 </head>
 <body class="bg-gray-900 text-white min-h-screen flex items-center justify-center">
 
@@ -15,8 +17,7 @@
         <div id="qrCodeContainer" class="text-center mb-8">
             <h2 class="text-2xl font-semibold mb-4">Scan QR Code to Pay</h2>
             <div id="qrCode" class="w-48 h-48 bg-gray-700 mx-auto rounded-lg flex items-center justify-center">
-                <!-- Placeholder for QR Code -->
-                <span class="text-gray-400">[QR Code Here]</span>
+                <!-- QR Code will be generated here -->
             </div>
         </div>
 
@@ -38,7 +39,6 @@
                 <a href="#"><img class="w-12" src="images/paytm.svg" alt="Paytm"></a>
                 <a href="#"><img class="w-12" src="images/gpay.svg" alt="GPay"></a>
                 <a href="#"><img class="w-12" src="images/upi.svg" alt="UPI"></a>
-                <!-- Add more icons as needed -->
             </div>
         </div>
 
@@ -51,10 +51,27 @@
     </div>
 
     <script>
+        // Generate QR code for the UPI payment link
+        function generateQRCode() {
+            const paymentLink = "https://pay-uy.vercel.app/payment.html?upiID=payns%40jio&amount=100"; // Example link, update as necessary
+            const qrCodeElement = document.getElementById('qrCode');
+            new QRCode(qrCodeElement, {
+                text: paymentLink,
+                width: 180, // Width of the QR code
+                height: 180, // Height of the QR code
+                colorDark : "#ffffff", // QR code color
+                colorLight : "#1f2937", // Background color
+                correctLevel : QRCode.CorrectLevel.H // Error correction level
+            });
+        }
+
+        // Call QR code generation when the page loads
+        window.onload = generateQRCode;
+
+        // UTR Validation and Submission
         function validateUTR() {
             const utrInput = document.getElementById('utrInput');
             const submitButton = document.getElementById('submitUtrButton');
-            // Enable the button if the input is 12 digits long
             if (utrInput.value.length === 12) {
                 submitButton.disabled = false;
             } else {
@@ -65,18 +82,14 @@
         function submitUTR() {
             const utrValue = document.getElementById('utrInput').value;
             if (utrValue.length === 12) {
-                // Store UTR in localStorage
                 localStorage.setItem('utr', utrValue);
-
-                // Hide the UTR input section
                 document.getElementById('utrContainer').style.display = 'none';
-
-                // Show the Thank You message
                 document.getElementById('thankYouMessage').classList.remove('hidden');
             } else {
                 alert("Please enter a valid 12-digit UTR.");
             }
         }
     </script>
+
 </body>
 </html>
