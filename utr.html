@@ -43,10 +43,10 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            const urlParams = new URLSearchParams(window.location.search);
-            const utr = urlParams.get('utr');
-            const date = urlParams.get('date');
-            const time = urlParams.get('time');
+            // Retrieve UTR and details from localStorage
+            const utr = localStorage.getItem('utr');
+            const date = localStorage.getItem('date');
+            const time = localStorage.getItem('time');
 
             if (utr && date && time) {
                 document.getElementById('utr').textContent = utr;
@@ -57,6 +57,11 @@
                 document.getElementById('dateDisplay').style.display = 'none';
                 document.getElementById('timeDisplay').style.display = 'none';
             }
+
+            // Clear the stored values after displaying
+            localStorage.removeItem('utr');
+            localStorage.removeItem('date');
+            localStorage.removeItem('time');
         });
     </script>
 </body>
