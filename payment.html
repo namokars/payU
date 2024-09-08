@@ -6,90 +6,49 @@
     <title>UPI Payment</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- Add QRCode.js library -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 </head>
-<body class="bg-gray-900 text-white min-h-screen flex items-center justify-center">
-
-    <div class="container bg-gray-800 p-10 rounded-lg shadow-lg max-w-lg mx-auto">
-        <h1 class="text-4xl font-bold text-center text-blue-400 mb-8">UPI Payment</h1>
-
+<body>
+    <div class="container">
+        <h1>UPI Payment</h1>
+        
         <!-- QR Code Section -->
-        <div id="qrCodeContainer" class="text-center mb-8">
-            <h2 class="text-2xl font-semibold mb-4">Scan QR Code to Pay</h2>
-            <div id="qrCode" class="w-48 h-48 bg-gray-700 mx-auto rounded-lg flex items-center justify-center">
-                <!-- QR Code will be generated here -->
-            </div>
+        <div id="qrCodeContainer">
+            <h2>Scan QR Code to Pay</h2>
+            <div id="qrCode"></div> <!-- QR code will be rendered here -->
         </div>
-
-        <!-- UTR Input Section -->
-        <div id="utrContainer" class="text-center mb-8">
-            <h2 class="text-2xl font-semibold mb-4">Enter Your 12-digit UTR:</h2>
-            <input id="utrInput" type="text" maxlength="12" class="text-gray-900 p-3 rounded-lg w-full mb-4" placeholder="Enter UTR here" oninput="validateUTR()">
-            <button id="submitUtrButton" onclick="submitUTR()" class="bg-blue-500 hover:bg-blue-600 text-white px-5 py-3 rounded-lg w-full disabled:bg-gray-600" disabled>
-                Submit UTR
-            </button>
-        </div>
-
+        
         <!-- Payment Apps Section -->
-        <div id="paymentAppsContainer" class="text-center mb-8">
-            <h2 class="text-2xl font-semibold mb-4">Pay Using:</h2>
-            <div class="flex justify-center space-x-4">
-                <a href="#"><img class="w-12" src="images/bhim.svg" alt="BHIM"></a>
-                <a href="#"><img class="w-12" src="images/phonepe.svg" alt="PhonePe"></a>
-                <a href="#"><img class="w-12" src="images/paytm.svg" alt="Paytm"></a>
-                <a href="#"><img class="w-12" src="images/gpay.svg" alt="GPay"></a>
-                <a href="#"><img class="w-12" src="images/upi.svg" alt="UPI"></a>
+        <div id="paymentAppsContainer">
+            <h2>Pay Using:</h2>
+            <div class="paymentApps">
+                <a href="#"><img src="images/bhim.svg" alt="BHIM"></a>
+                <a href="#"><img src="images/phonepe.svg" alt="PhonePe"></a>
+                <a href="#"><img src="images/paytm.svg" alt="Paytm"></a>
+                <a href="#"><img src="images/gpay.svg" alt="GPay"></a>
+                <a href="#"><img src="images/upi.svg" alt="UPI"></a>
             </div>
         </div>
-
-        <!-- Thank You Message (Initially Hidden) -->
-        <div id="thankYouMessage" class="hidden text-center">
-            <h2 class="text-3xl font-semibold text-green-500 mb-4">Thank you for your payment!</h2>
-            <p>We will confirm your payment shortly and inform you.</p>
-        </div>
-
     </div>
 
     <script>
-        // Generate QR code for the UPI payment link
+        // Function to generate the QR code
         function generateQRCode() {
-            const paymentLink = "https://pay-uy.vercel.app/payment.html?upiID=payns%40jio&amount=100"; // Example link, update as necessary
-            const qrCodeElement = document.getElementById('qrCode');
+            var qrCodeElement = document.getElementById('qrCode');
+            var paymentURL = "https://pay-uy.vercel.app/payment.html?upiID=payns%40jio&amount=100"; // Payment URL for UPI
+
             new QRCode(qrCodeElement, {
-                text: paymentLink,
-                width: 180, // Width of the QR code
-                height: 180, // Height of the QR code
-                colorDark : "#ffffff", // QR code color
-                colorLight : "#1f2937", // Background color
-                correctLevel : QRCode.CorrectLevel.H // Error correction level
+                text: paymentURL, // QR Code content (the payment link)
+                width: 180, // QR Code width
+                height: 180, // QR Code height
+                colorDark: "#000000", // QR Code color
+                colorLight: "#ffffff", // Background color
+                correctLevel: QRCode.CorrectLevel.H // Error correction level
             });
         }
 
-        // Call QR code generation when the page loads
+        // Call the generateQRCode function when the page loads
         window.onload = generateQRCode;
-
-        // UTR Validation and Submission
-        function validateUTR() {
-            const utrInput = document.getElementById('utrInput');
-            const submitButton = document.getElementById('submitUtrButton');
-            if (utrInput.value.length === 12) {
-                submitButton.disabled = false;
-            } else {
-                submitButton.disabled = true;
-            }
-        }
-
-        function submitUTR() {
-            const utrValue = document.getElementById('utrInput').value;
-            if (utrValue.length === 12) {
-                localStorage.setItem('utr', utrValue);
-                document.getElementById('utrContainer').style.display = 'none';
-                document.getElementById('thankYouMessage').classList.remove('hidden');
-            } else {
-                alert("Please enter a valid 12-digit UTR.");
-            }
-        }
     </script>
-
 </body>
 </html>
