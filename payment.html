@@ -40,7 +40,6 @@
         }
 
         #qrCode {
-            background-color: #eee;
             padding: 20px;
             margin-bottom: 20px;
             border-radius: 8px;
@@ -97,8 +96,7 @@
         <div id="qrCodeContainer">
             <h2>Scan QR Code to Pay</h2>
             <div id="qrCode">
-                <!-- Placeholder for QR Code -->
-                <span>[QR Code Here]</span>
+                <!-- QR Code will be generated here -->
             </div>
         </div>
 
@@ -126,13 +124,38 @@
         <div id="thankYouMessage">Thank you for your payment! We will confirm it shortly.</div>
     </div>
 
-    <script src="script.js"></script>
     <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const upiID = urlParams.get('upiID');
+            const amount = urlParams.get('amount');
+
+            if (upiID && amount) {
+                const paymentLink = `upi://pay?pa=${encodeURIComponent(upiID)}&am=${encodeURIComponent(amount)}&cu=INR`;
+                generateQR(paymentLink); // Generate the QR code with this link
+            } else {
+                document.getElementById('qrCode').textContent = 'Error: Payment details not found.';
+            }
+        });
+
+        // Function to generate QR code using qrserver.com API
+        function generateQR(paymentLink) {
+            const qrCodeUrl = `https://api.qrserver.com/v1/create-qr-code/?size=225x225&data=${encodeURIComponent(paymentLink)}`;
+
+            const qrCodeImg = document.createElement('img');
+            qrCodeImg.src = qrCodeUrl;
+            qrCodeImg.alt = 'QR Code';
+
+            // Clear any previous QR code and append the new one
+            const qrCodeContainer = document.getElementById('qrCode');
+            qrCodeContainer.innerHTML = ''; // Clear the container
+            qrCodeContainer.appendChild(qrCodeImg);
+        }
+
         // Function to handle UTR input submission
         function submitUTR() {
             const utrInput = document.getElementById('utrInput').value;
 
-            // Check if the UTR is 12 digits
             if (utrInput.length === 12) {
                 // Store the UTR in localStorage
                 localStorage.setItem('utr', utrInput);
@@ -140,10 +163,10 @@
                 // Show a thank you message
                 document.getElementById('thankYouMessage').style.display = 'block';
 
-                // Hide the input form
+                // Hide the UTR input form
                 document.getElementById('utrInputContainer').style.display = 'none';
             } else {
-                alert("Please enter a valid 12-digit UTR.");
+                alert('Please enter a valid 12-digit UTR.');
             }
         }
     </script>
