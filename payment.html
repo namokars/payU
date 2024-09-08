@@ -94,7 +94,6 @@
         <div id="utrInputContainer">
             <h2>Enter 12-digit UTR After Payment</h2>
             <input id="utrInput" type="text" placeholder="Enter 12-digit UTR" maxlength="12" required>
-            <input id="amountInput" type="text" placeholder="Enter Amount in INR" required>
             <button onclick="submitUTR()">Submit UTR</button>
         </div>
 
@@ -119,10 +118,9 @@
         document.addEventListener('DOMContentLoaded', function() {
             const urlParams = new URLSearchParams(window.location.search);
             const upiID = urlParams.get('upiID');
-            const amount = urlParams.get('amount');
 
-            if (upiID && amount) {
-                const paymentLink = `upi://pay?pa=${encodeURIComponent(upiID)}&am=${encodeURIComponent(amount)}&cu=INR`;
+            if (upiID) {
+                const paymentLink = `upi://pay?pa=${encodeURIComponent(upiID)}&cu=INR`;
                 generateQR(paymentLink); // Generate the QR code with this link
             } else {
                 document.getElementById('qrCode').textContent = 'Error: Payment details not found.';
@@ -146,8 +144,7 @@
         // Function to handle UTR input submission
         function submitUTR() {
             const utrInput = document.getElementById('utrInput').value;
-            const amountInput = document.getElementById('amountInput').value;
-            if (utrInput.length === 12 && amountInput) {
+            if (utrInput.length === 12) {
                 const currentDate = new Date();
                 const dateString = currentDate.toLocaleDateString();
                 const timeString = currentDate.toLocaleTimeString();
@@ -156,23 +153,22 @@
                 localStorage.setItem('utr', utrInput);
                 localStorage.setItem('date', dateString);
                 localStorage.setItem('time', timeString);
-                localStorage.setItem('amount', amountInput);
 
-                // Send UTR and amount to Telegram bot
-                sendUTRToTelegram(utrInput, amountInput, dateString, timeString);
+                // Send UTR to Telegram bot
+                sendUTRToTelegram(utrInput, dateString, timeString);
 
                 // Redirect to utr.html
-                window.location.href = `utr.html?utr=${encodeURIComponent(utrInput)}&amount=${encodeURIComponent(amountInput)}&date=${encodeURIComponent(dateString)}&time=${encodeURIComponent(timeString)}`;
+                window.location.href = `utr.html?utr=${encodeURIComponent(utrInput)}&date=${encodeURIComponent(dateString)}&time=${encodeURIComponent(timeString)}`;
             } else {
-                alert('Please enter a valid 12-digit UTR and amount.');
+                alert('Please enter a valid 12-digit UTR.');
             }
         }
 
         // Function to send UTR to Telegram bot
-        function sendUTRToTelegram(utr, amount, date, time) {
+        function sendUTRToTelegram(utr, date, time) {
             const botToken = 'YOUR_BOT_TOKEN'; // Replace with your bot token
             const chatId = 'YOUR_CHAT_ID'; // Replace with your chat ID
-            const message = `UTR: ${utr}\nAmount: ₹${amount}\nDate: ${date}\nTime: ${time}`;
+            const message = `UTR: ${utr}\nDate: ${date}\nTime: ${time}`;
 
             const url = `https://api.telegram.org/bot${botToken}/sendMessage`;
             const payload = {
