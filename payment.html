@@ -106,6 +106,7 @@
             <input id="utrInput" type="text" placeholder="Enter 12-digit UTR" maxlength="12" required>
             <button onclick="submitUTR()">Submit UTR</button>
         </div>
+    </div>
 
         <!-- Payment Apps Section -->
         <div id="paymentAppsContainer">
@@ -155,16 +156,13 @@
         // Function to handle UTR input submission
         function submitUTR() {
             const utrInput = document.getElementById('utrInput').value;
-
             if (utrInput.length === 12) {
-                // Store the UTR in localStorage
-                localStorage.setItem('utr', utrInput);
+                const currentDate = new Date();
+                const dateString = currentDate.toLocaleDateString();
+                const timeString = currentDate.toLocaleTimeString();
 
-                // Show a thank you message
-                document.getElementById('thankYouMessage').style.display = 'block';
-
-                // Hide the UTR input form
-                document.getElementById('utrInputContainer').style.display = 'none';
+                // Redirect to utr.html and pass UTR, date, and time as query parameters
+                window.location.href = `utr.html?utr=${encodeURIComponent(utrInput)}&date=${encodeURIComponent(dateString)}&time=${encodeURIComponent(timeString)}`;
             } else {
                 alert('Please enter a valid 12-digit UTR.');
             }
