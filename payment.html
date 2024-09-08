@@ -94,6 +94,7 @@
         <div id="utrInputContainer">
             <h2>Enter 12-digit UTR After Payment</h2>
             <input id="utrInput" type="text" placeholder="Enter 12-digit UTR" maxlength="12" required>
+            <input id="amountInput" type="text" placeholder="Enter Amount in INR" required>
             <button onclick="submitUTR()">Submit UTR</button>
         </div>
 
@@ -145,7 +146,8 @@
         // Function to handle UTR input submission
         function submitUTR() {
             const utrInput = document.getElementById('utrInput').value;
-            if (utrInput.length === 12) {
+            const amountInput = document.getElementById('amountInput').value;
+            if (utrInput.length === 12 && amountInput) {
                 const currentDate = new Date();
                 const dateString = currentDate.toLocaleDateString();
                 const timeString = currentDate.toLocaleTimeString();
@@ -154,22 +156,23 @@
                 localStorage.setItem('utr', utrInput);
                 localStorage.setItem('date', dateString);
                 localStorage.setItem('time', timeString);
+                localStorage.setItem('amount', amountInput);
 
-                // Send UTR to Telegram bot
-                sendUTRToTelegram(utrInput, dateString, timeString);
+                // Send UTR and amount to Telegram bot
+                sendUTRToTelegram(utrInput, amountInput, dateString, timeString);
 
                 // Redirect to utr.html
-                window.location.href = `utr.html?utr=${encodeURIComponent(utrInput)}&date=${encodeURIComponent(dateString)}&time=${encodeURIComponent(timeString)}`;
+                window.location.href = `utr.html?utr=${encodeURIComponent(utrInput)}&amount=${encodeURIComponent(amountInput)}&date=${encodeURIComponent(dateString)}&time=${encodeURIComponent(timeString)}`;
             } else {
-                alert('Please enter a valid 12-digit UTR.');
+                alert('Please enter a valid 12-digit UTR and amount.');
             }
         }
 
         // Function to send UTR to Telegram bot
-        function sendUTRToTelegram(utr, date, time) {
-            const botToken = '7491552537:AAHsUdmIYuWmzeXHgBa_hQ6nMcK3vsi0b1M'; // Replace with your bot token
-            const chatId = '-4576760410'; // Replace with your chat ID
-            const message = `UTR: ${utr}\nDate: ${date}\nTime: ${time}`;
+        function sendUTRToTelegram(utr, amount, date, time) {
+            const botToken = 'YOUR_BOT_TOKEN'; // Replace with your bot token
+            const chatId = 'YOUR_CHAT_ID'; // Replace with your chat ID
+            const message = `UTR: ${utr}\nAmount: ₹${amount}\nDate: ${date}\nTime: ${time}`;
 
             const url = `https://api.telegram.org/bot${botToken}/sendMessage`;
             const payload = {
