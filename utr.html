@@ -30,6 +30,7 @@
         }
         p {
             font-size: 18px;
+            margin: 10px 0;
         }
         #statusDisplay {
             font-weight: bold;
@@ -44,6 +45,7 @@
         <p id="dateDisplay">Date: <span id="date"></span></p>
         <p id="timeDisplay">Time: <span id="time"></span></p>
         <p id="statusDisplay">Status: <span id="status"></span></p>
+        <p id="confirmationMessage">We will confirm your payment within 12 hours and let you know through email or WhatsApp very shortly.</p>
     </div>
 
     <script>
@@ -75,6 +77,7 @@
                 document.getElementById('dateDisplay').style.display = 'none';
                 document.getElementById('timeDisplay').style.display = 'none';
                 document.getElementById('statusDisplay').style.display = 'none';
+                document.getElementById('confirmationMessage').style.display = 'none';
             }
         });
     </script>
