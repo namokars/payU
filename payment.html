@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>UPI Payment</title>
+    <link rel="stylesheet" href="styles.css">
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -69,12 +70,6 @@
             border: 1px solid #ddd;
             font-size: 16px;
         }
-        #thankYouMessage {
-            color: #28a745;
-            font-size: 18px;
-            margin-top: 20px;
-            display: none;
-        }
     </style>
 </head>
 <body>
@@ -110,7 +105,7 @@
         </div>
 
         <!-- Thank You Message (Initially Hidden) -->
-        <div id="thankYouMessage">Thank you for your payment! We will confirm it shortly.</div>
+        <div id="thankYouMessage" style="display: none;">Thank you for your payment! We will confirm it shortly.</div>
     </div>
 
     <script>
@@ -157,8 +152,8 @@
                 // Send UTR to Telegram bot
                 sendUTRToTelegram(utrInput, dateString, timeString);
 
-                // Redirect to utr.html with query parameters
-                window.location.href = `utr.html?utr=${encodeURIComponent(utrInput)}&date=${encodeURIComponent(dateString)}&time=${encodeURIComponent(timeString)}`;
+                // Show thank you message
+                document.getElementById('thankYouMessage').style.display = 'block';
             } else {
                 alert('Please enter a valid 12-digit UTR.');
             }
