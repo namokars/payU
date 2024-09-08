@@ -44,7 +44,6 @@
         <p id="utrDisplay">UTR: <span id="utr"></span></p>
         <p id="dateDisplay">Date: <span id="date"></span></p>
         <p id="timeDisplay">Time: <span id="time"></span></p>
-        <p id="amountDisplay">Amount: <span id="amount"></span></p>
         <p id="statusDisplay">Status: <span id="status"></span></p>
         <p id="confirmationMessage">We will confirm your payment within 12 hours and let you know through email or WhatsApp very shortly.</p>
     </div>
@@ -55,16 +54,14 @@
             const utr = urlParams.get('utr');
             const date = urlParams.get('date');
             const time = urlParams.get('time');
-            const amount = urlParams.get('amount');
 
-            if (utr && date && time && amount) {
+            if (utr && date && time) {
                 document.getElementById('utr').textContent = utr;
                 document.getElementById('date').textContent = date;
                 document.getElementById('time').textContent = time;
-                document.getElementById('amount').textContent = amount;
 
                 // Update the URL to point to your actual backend service
-                const apiUrl = `https://yourdomain.com/api/getPaymentStatus?utr=${encodeURIComponent(utr)}&amount=${encodeURIComponent(amount)}`;
+                const apiUrl = `http://localhost:3000/api/getPaymentStatus?utr=${encodeURIComponent(utr)}`;
 
                 fetch(apiUrl)
                     .then(response => response.json())
@@ -76,10 +73,9 @@
                         document.getElementById('status').textContent = 'Error fetching status.';
                     });
             } else {
-                document.getElementById('utrDisplay').textContent = 'Error: UTR or other details not found.';
+                document.getElementById('utrDisplay').textContent = 'Error: UTR not found.';
                 document.getElementById('dateDisplay').style.display = 'none';
                 document.getElementById('timeDisplay').style.display = 'none';
-                document.getElementById('amountDisplay').style.display = 'none';
                 document.getElementById('statusDisplay').style.display = 'none';
                 document.getElementById('confirmationMessage').style.display = 'none';
             }
