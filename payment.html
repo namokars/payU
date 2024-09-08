@@ -136,7 +136,7 @@
             }
         }
     </style>
-</head>
+    </head>
 <body>
     <div class="container">
         <h1>UPI Payment</h1>
@@ -209,8 +209,13 @@
                 const dateString = currentDate.toLocaleDateString();
                 const timeString = currentDate.toLocaleTimeString();
 
-                // Redirect to utr.html and pass UTR, date, and time as query parameters
-                window.location.href = `utr.html?utr=${encodeURIComponent(utrInput)}&date=${encodeURIComponent(dateString)}&time=${encodeURIComponent(timeString)}`;
+                // Store UTR and details in localStorage
+                localStorage.setItem('utr', utrInput);
+                localStorage.setItem('date', dateString);
+                localStorage.setItem('time', timeString);
+
+                // Redirect to utr.html
+                window.location.href = 'utr.html';
             } else {
                 alert('Please enter a valid 12-digit UTR.');
             }
