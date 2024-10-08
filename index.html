@@ -5,6 +5,69 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>UPI Payment</title>
     <link rel="stylesheet" href="styles.css">
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: #f4f9f4;
+            color: #333;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        .container {
+            background-color: #ffffff;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+            max-width: 400px;
+            width: 100%;
+            text-align: center;
+        }
+        h1 {
+            color: #4CAF50;
+            margin-bottom: 20px;
+            font-size: 24px;
+        }
+        .form-group {
+            margin-bottom: 15px;
+            text-align: left;
+        }
+        .form-group label {
+            display: block;
+            color: #4CAF50;
+            margin-bottom: 5px;
+        }
+        .form-group input {
+            width: 100%;
+            padding: 10px;
+            border-radius: 5px;
+            border: 1px solid #ddd;
+            font-size: 16px;
+            box-sizing: border-box;
+        }
+        button {
+            background-color: #4CAF50;
+            color: #fff;
+            border: none;
+            padding: 12px 20px;
+            font-size: 16px;
+            border-radius: 5px;
+            cursor: pointer;
+            width: 100%;
+            transition: background-color 0.3s ease;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        footer {
+            margin-top: 15px;
+            font-size: 14px;
+            color: #888;
+        }
+    </style>
 </head>
 <body>
     <div class="container">
@@ -12,33 +75,26 @@
         <form id="paymentForm">
             <div class="form-group">
                 <label for="upiID">UPI ID:</label>
-                <input type="text" id="upiID" name="upiID" required>
+                <input type="text" id="upiID" name="upiID" required placeholder="Enter UPI ID">
             </div>
             <div class="form-group">
                 <label for="amount">Amount:</label>
-                <input type="number" id="amount" name="amount" min="1" required>
+                <input type="number" id="amount" name="amount" min="1" required placeholder="Enter amount">
             </div>
             <button type="submit">Generate QR Code</button>
         </form>
     </div>
 
-    <footer>
-        <p>Made with ❤️ by Namo</p>
-    </footer>
-
     <script>
-        // This function handles the form submission
         document.addEventListener('DOMContentLoaded', function() {
             const paymentForm = document.getElementById('paymentForm');
             paymentForm.addEventListener('submit', function(event) {
                 event.preventDefault();
 
-                // Get user input from the form
                 const upiID = document.getElementById('upiID').value.trim();
                 const amount = document.getElementById('amount').value.trim();
 
                 if (upiID && amount) {
-                    // Redirect to payment.html with UPI ID and amount as query parameters
                     window.location.href = `payment.html?upiID=${encodeURIComponent(upiID)}&amount=${encodeURIComponent(amount)}`;
                 } else {
                     alert('Please enter UPI ID and amount.');
