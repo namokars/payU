@@ -7,8 +7,8 @@
     <link rel="stylesheet" href="styles.css">
     <style>
         body {
-            font-family: Arial, sans-serif;
-            background-color: #f4f4f4;
+            font-family: 'Roboto', sans-serif;
+            background-color: #f4f9f4;
             color: #333;
             margin: 0;
             display: flex;
@@ -17,28 +17,29 @@
             height: 100vh;
         }
         .container {
-            background-color: #fff;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-            text-align: center;
+            background-color: #ffffff;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
             max-width: 500px;
             width: 100%;
+            text-align: center;
         }
         h1 {
-            color: #007bff;
+            color: #4CAF50;
             margin-bottom: 20px;
-            font-size: 28px;
+            font-size: 24px;
         }
         h2 {
             color: #555;
             margin-bottom: 15px;
-            font-size: 20px;
+            font-size: 18px;
         }
         #qrCode {
             padding: 20px;
             margin-bottom: 20px;
-            border-radius: 8px;
+            border-radius: 10px;
+            background-color: #f4f4f4;
         }
         .paymentApps img {
             width: 50px;
@@ -49,17 +50,18 @@
             transform: scale(1.1);
         }
         button {
-            background-color: #007bff;
+            background-color: #4CAF50;
             color: #fff;
             border: none;
-            padding: 10px 20px;
+            padding: 12px 20px;
             font-size: 16px;
             border-radius: 5px;
             cursor: pointer;
+            width: 100%;
             transition: background-color 0.3s ease;
         }
         button:hover {
-            background-color: #0056b3;
+            background-color: #45a049;
         }
         input {
             width: 100%;
@@ -81,8 +83,6 @@
 <body>
     <div class="container">
         <h1>UPI Payment</h1>
-        
-        <!-- QR Code Section -->
         <div id="qrCodeContainer">
             <h2>Scan QR Code to Pay</h2>
             <div id="qrCode">
@@ -90,7 +90,6 @@
             </div>
         </div>
 
-        <!-- UTR Input Section -->
         <div id="utrInputContainer">
             <h2>Enter 12-digit UTR After Payment</h2>
             <input id="utrInput" type="text" placeholder="Enter 12-digit UTR" maxlength="12" required>
@@ -99,20 +98,6 @@
             <button onclick="submitUTR()">Submit UTR</button>
         </div>
 
-        <!-- Payment Apps Section -->
-        <div id="paymentAppsContainer">
-            <h2>Pay Using:</h2>
-            <div class="paymentApps">
-                <a href="#"><img src="images/bhim.svg" alt="BHIM"></a>
-                <a href="#"><img src="images/phonepe.svg" alt="PhonePe"></a>
-                <a href="#"><img src="images/paytm.svg" alt="Paytm"></a>
-                <a href="#"><img src="images/gpay.svg" alt="GPay"></a>
-                <a href="#"><img src="images/upi.svg" alt="UPI"></a>
-                <!-- Add more payment app icons as needed -->
-            </div>
-        </div>
-
-        <!-- Thank You Message (Initially Hidden) -->
         <div id="thankYouMessage">Thank you for your payment! We will confirm it shortly.</div>
     </div>
 
@@ -120,30 +105,27 @@
         document.addEventListener('DOMContentLoaded', function() {
             const urlParams = new URLSearchParams(window.location.search);
             const upiID = urlParams.get('upiID');
+            const amount = urlParams.get('amount');
 
-            if (upiID) {
-                const paymentLink = `upi://pay?pa=${encodeURIComponent(upiID)}&cu=INR`;
-                generateQR(paymentLink); // Generate the QR code with this link
+            if (upiID && amount) {
+                const paymentLink = `upi://pay?pa=${encodeURIComponent(upiID)}&am=${encodeURIComponent(amount)}&cu=INR`;
+                generateQR(paymentLink);
             } else {
                 document.getElementById('qrCode').textContent = 'Error: Payment details not found.';
             }
         });
 
-        // Function to generate QR code using qrserver.com API
         function generateQR(paymentLink) {
             const qrCodeUrl = `https://api.qrserver.com/v1/create-qr-code/?size=225x225&data=${encodeURIComponent(paymentLink)}`;
-
             const qrCodeImg = document.createElement('img');
             qrCodeImg.src = qrCodeUrl;
             qrCodeImg.alt = 'QR Code';
 
-            // Clear any previous QR code and append the new one
             const qrCodeContainer = document.getElementById('qrCode');
-            qrCodeContainer.innerHTML = ''; // Clear the container
+            qrCodeContainer.innerHTML = '';
             qrCodeContainer.appendChild(qrCodeImg);
         }
 
-        // Function to handle UTR input submission
         function submitUTR() {
             const utrInput = document.getElementById('utrInput').value;
             const phoneInput = document.getElementById('phoneInput').value;
@@ -154,46 +136,48 @@
                 const dateString = currentDate.toLocaleDateString();
                 const timeString = currentDate.toLocaleTimeString();
 
-                // Store UTR and details in localStorage
                 localStorage.setItem('utr', utrInput);
                 localStorage.setItem('date', dateString);
                 localStorage.setItem('time', timeString);
                 localStorage.setItem('phone', phoneInput);
                 localStorage.setItem('email', emailInput);
 
-                // Send UTR and details to Telegram bot
                 sendUTRToTelegram(utrInput, phoneInput, emailInput, dateString, timeString);
-
-                // Redirect to utr.html
                 window.location.href = `utr.html?utr=${encodeURIComponent(utrInput)}&date=${encodeURIComponent(dateString)}&time=${encodeURIComponent(timeString)}`;
             } else {
                 alert('Please enter valid UTR, phone number, and email address.');
             }
         }
 
-        // Function to send UTR and details to Telegram bot
         function sendUTRToTelegram(utr, phone, email, date, time) {
-            const botToken = '7491552537:AAHsUdmIYuWmzeXHgBa_hQ6nMcK3vsi0b1M'; // Replace with your bot token
-            const chatId = '-4576760410'; // Replace with your chat ID
+            // Use the correct bot token and chat ID from the provided link.
+            const botToken = '7099528445:AAHeOBtX5B21eolUKSODT6OeNFlO8KqDmb4'; // Replace with your bot token
+            const chatId = '-1002295914250'; // Replace with your chat ID
             const message = `UTR: ${utr}\nPhone: ${phone}\nEmail: ${email}\nDate: ${date}\nTime: ${time}`;
-
-            const url = `https://api.telegram.org/bot${botToken}/sendMessage`;
-            const payload = {
-                chat_id: chatId,
-                text: message
-            };
-
-            fetch(url, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(payload)
-            })
-            .then(response => response.json())
-            .then(data => console.log('Details sent:', data))
-            .catch(error => console.error('Error:', error));
-        }
+        
+            // Construct the URL for the API request.
+            const url = `https://api.telegram.org/bot${botToken}/sendMessage?chat_id=${chatId}&text=${encodeURIComponent(message)}`;
+        
+            console.log('Sending request to Telegram API:', url);
+        
+            // Use fetch to send a GET request directly.
+            fetch(url)
+                .then(response => response.json())
+                .then(data => {
+                    console.log('Response from Telegram API:', data);
+                    if (data.ok) {
+                        console.log('Message sent successfully:', data);
+                    } else {
+                        console.error('Telegram API returned an error:', data);
+                        alert('Failed to send message: ' + data.description);
+                    }
+                })
+                .catch(error => {
+                    console.error('Network error:', error);
+                    alert('A network error occurred while sending the message.');
+                });
+        }        
+        
     </script>
 </body>
 </html>
