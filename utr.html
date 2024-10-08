@@ -3,11 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>UTR Confirmation</title>
+    <title>UTR Submission Successful</title>
     <style>
         body {
-            font-family: Arial, sans-serif;
-            background-color: #f4f4f4;
+            font-family: 'Roboto', sans-serif;
+            background-color: #f4f9f4;
             color: #333;
             margin: 0;
             display: flex;
@@ -16,36 +16,55 @@
             height: 100vh;
         }
         .container {
-            background-color: #fff;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-            text-align: center;
+            background-color: #ffffff;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
             max-width: 500px;
             width: 100%;
+            text-align: center;
         }
         h1 {
-            color: #28a745;
+            color: #4CAF50;
             margin-bottom: 20px;
+            font-size: 24px;
         }
         p {
             font-size: 18px;
+            color: #555;
             margin: 10px 0;
         }
-        #statusDisplay {
-            font-weight: bold;
+        .success-icon {
+            font-size: 50px;
+            color: #28a745;
+            margin-bottom: 20px;
+        }
+        button {
+            background-color: #4CAF50;
+            color: #fff;
+            border: none;
+            padding: 12px 20px;
+            font-size: 16px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
             margin-top: 20px;
+        }
+        button:hover {
+            background-color: #45a049;
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>Payment Confirmation</h1>
-        <p id="utrDisplay">UTR: <span id="utr"></span></p>
-        <p id="dateDisplay">Date: <span id="date"></span></p>
-        <p id="timeDisplay">Time: <span id="time"></span></p>
-        <p id="statusDisplay">Status: <span id="status"></span></p>
-        <p id="confirmationMessage">We will confirm your payment within 12 hours and let you know through email or WhatsApp very shortly.</p>
+        <div class="success-icon">✅</div>
+        <h1>Payment Details Submitted Successfully</h1>
+        <p><strong>UTR:</strong> <span id="utr"></span></p>
+        <p><strong>Phone:</strong> <span id="phone"></span></p>
+        <p><strong>Email:</strong> <span id="email"></span></p>
+        <p><strong>Date:</strong> <span id="date"></span></p>
+        <p><strong>Time:</strong> <span id="time"></span></p>
+        <button onclick="goBack()">Go Back</button>
     </div>
 
     <script>
@@ -55,31 +74,21 @@
             const date = urlParams.get('date');
             const time = urlParams.get('time');
 
-            if (utr && date && time) {
-                document.getElementById('utr').textContent = utr;
-                document.getElementById('date').textContent = date;
-                document.getElementById('time').textContent = time;
+            // Retrieve phone and email from local storage
+            const phone = localStorage.getItem('phone') || 'N/A';
+            const email = localStorage.getItem('email') || 'N/A';
 
-                // Update the URL to point to your actual backend service
-                const apiUrl = `http://localhost:3000/api/getPaymentStatus?utr=${encodeURIComponent(utr)}`;
-
-                fetch(apiUrl)
-                    .then(response => response.json())
-                    .then(data => {
-                        document.getElementById('status').textContent = data.status || 'Pending approval.';
-                    })
-                    .catch(error => {
-                        console.error('Error fetching payment status:', error);
-                        document.getElementById('status').textContent = 'Error fetching status.';
-                    });
-            } else {
-                document.getElementById('utrDisplay').textContent = 'Error: UTR not found.';
-                document.getElementById('dateDisplay').style.display = 'none';
-                document.getElementById('timeDisplay').style.display = 'none';
-                document.getElementById('statusDisplay').style.display = 'none';
-                document.getElementById('confirmationMessage').style.display = 'none';
-            }
+            // Display the details on the page
+            document.getElementById('utr').textContent = utr || 'N/A';
+            document.getElementById('phone').textContent = phone;
+            document.getElementById('email').textContent = email;
+            document.getElementById('date').textContent = date || 'N/A';
+            document.getElementById('time').textContent = time || 'N/A';
         });
+
+        function goBack() {
+            window.location.href = 'payment.html?upiID=${encodeURIComponent(upiID)}&amount=${encodeURIComponent(amount)}';
+        }
     </script>
 </body>
 </html>
