@@ -1,165 +1,96 @@
 body {
-    font-family: Arial, sans-serif;
-    background-color: #f0f0f0;
     margin: 0;
-    padding: 0;
+    font-family: 'Roboto', sans-serif;
+    background-color: #f4f4f9;
+    color: #333;
 }
 
 .container {
-    max-width: 600px;
-    margin: 50px auto;
-    background-color: #fff;
+    max-width: 800px;
+    margin: 0 auto;
     padding: 20px;
-    border-radius: 8px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     text-align: center;
+    background: #fff;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+}
+
+.header {
+    background-color: #6200ea;
+    color: #fff;
+    padding: 20px 0;
+    border-radius: 8px 8px 0 0;
 }
 
 h1, h2 {
-    color: #333;
+    margin: 10px 0;
 }
 
-.form-group {
-    margin-bottom: 15px;
-    text-align: left;
+h1 {
+    font-size: 2rem;
+    font-weight: 700;
 }
 
-label {
-    display: block;
-    margin-bottom: 5px;
+h2 {
+    font-size: 1.5rem;
+    color: #6200ea;
 }
 
-input[type="text"],
-input[type="number"] {
-    width: 100%;
-    padding: 8px;
-    font-size: 16px;
-    border: 1px solid #ccc;
+.section {
+    margin: 20px 0;
+    padding: 20px;
+}
+
+.qr-code {
+    width: 200px;
+    height: 200px;
+    background: #ddd;
+    margin: 0 auto;
+    border: 2px dashed #6200ea;
     border-radius: 4px;
 }
 
-button {
-    display: block;
-    width: 100%;
-    padding: 10px;
-    background-color: #007bff;
-    color: #fff;
-    border: none;
-    border-radius: 4px;
-    font-size: 16px;
-    cursor: pointer;
+.payment-link {
+    display: none;
+    color: #6200ea;
+    font-weight: bold;
     margin-top: 10px;
 }
 
-button:hover {
-    background-color: #0056b3;
-}
-
-#qrCodeContainer {
-    margin-top: 30px;
-}
-
-#qrCode {
-    display: inline-block;
-    padding: 10px;
-    background-color: #fff;
-    border-radius: 8px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-}
-
-#qrCode img {
-    max-width: 100%;
-    height: auto;
-    border: 1px solid #ccc;
-    border-radius: 8px;
-}
-
-#paymentLinkContainer {
-    margin-top: 20px;
-}
-
-#paymentLink {
-    font-size: 18px;
-    background-color: #f9f9f9;
-    padding: 10px;
+.btn {
+    padding: 10px 20px;
+    background: #6200ea;
+    color: #fff;
+    border: none;
     border-radius: 4px;
-    border: 1px solid #ccc;
-    word-wrap: break-word;
-}
-
-#paymentAppsContainer {
-    margin-top: 30px;
-}
-
-.paymentApps {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-wrap: wrap; /* Allow items to wrap to the next line */
-}
-
-.paymentApps a {
-    display: inline-block;
-    margin: 10px;
-    text-align: center; /* Center-align items */
-    flex-basis: 45%; /* Adjust based on the number of items per row */
-    max-width: 150px; /* Limit maximum width of each item */
-}
-
-.paymentApps img {
-    width: 100%; /* Adjust size of image */
-    height: auto;
-    border-radius: 8px;
+    font-size: 1rem;
     cursor: pointer;
-    transition: transform 0.3s ease-in-out;
+    transition: background 0.3s ease;
 }
 
-.paymentApps img:hover {
+.btn:hover {
+    background: #4b00b0;
+}
+
+.payment-apps a {
+    margin: 0 10px;
+    display: inline-block;
+}
+
+.payment-apps img {
+    width: 60px;
+    height: auto;
+    transition: transform 0.3s ease;
+}
+
+.payment-apps img:hover {
     transform: scale(1.1);
 }
-footer {
-    background-color: #f1f1f1;
-    text-align: center;
-    padding: 10px;
-    position: fixed;
-    bottom: 0;
-    width: 100%;
-    border-top: 1px solid #ddd;
-}
 
-footer p {
-    margin: 0;
-    font-size: 14px;
-    color: #333;
-}
-/* Container for the button */
-#markAsDoneContainer {
-    text-align: center;
+.footer {
+    padding: 10px;
+    background: #6200ea;
+    color: #fff;
+    border-radius: 0 0 8px 8px;
     margin-top: 20px;
 }
-
-/* Style for the Mark as Done button */
-.mark-done-btn {
-    background: linear-gradient(135deg, #6ab04c, #3a9d23); /* Gradient background */
-    border: none;
-    color: white;
-    font-size: 16px;
-    padding: 15px 30px;
-    border-radius: 8px;
-    cursor: pointer;
-    transition: all 0.3s ease; /* Smooth transition for hover effect */
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Subtle shadow */
-    font-weight: bold;
-}
-
-.mark-done-btn:hover {
-    background: linear-gradient(135deg, #3a9d23, #6ab04c); /* Reverse gradient on hover */
-    transform: translateY(-3px); /* Lift effect */
-    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3); /* Enhanced shadow on hover */
-}
-
-.mark-done-btn:focus {
-    outline: none;
-    box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.2); /* Focus outline */
-}
-
