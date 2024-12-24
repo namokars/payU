@@ -3,181 +3,153 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>UPI Payment</title>
-    <link rel="stylesheet" href="styles.css">
-    <style>
-        body {
-            font-family: 'Roboto', sans-serif;
-            background-color: #f4f9f4;
-            color: #333;
-            margin: 0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-        }
-        .container {
-            background-color: #ffffff;
-            padding: 30px;
-            border-radius: 15px;
-            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
-            max-width: 500px;
-            width: 100%;
-            text-align: center;
-        }
-        h1 {
-            color: #4CAF50;
-            margin-bottom: 20px;
-            font-size: 24px;
-        }
-        h2 {
-            color: #555;
-            margin-bottom: 15px;
-            font-size: 18px;
-        }
-        #qrCode {
-            padding: 20px;
-            margin-bottom: 20px;
-            border-radius: 10px;
-            background-color: #f4f4f4;
-        }
-        .paymentApps img {
-            width: 50px;
-            margin: 10px;
-            transition: transform 0.3s ease;
-        }
-        .paymentApps img:hover {
-            transform: scale(1.1);
-        }
-        button {
-            background-color: #4CAF50;
-            color: #fff;
-            border: none;
-            padding: 12px 20px;
-            font-size: 16px;
-            border-radius: 5px;
-            cursor: pointer;
-            width: 100%;
-            transition: background-color 0.3s ease;
-        }
-        button:hover {
-            background-color: #45a049;
-        }
-        input {
-            width: 100%;
-            padding: 10px;
-            margin-top: 10px;
-            margin-bottom: 20px;
-            border-radius: 5px;
-            border: 1px solid #ddd;
-            font-size: 16px;
-        }
-        #thankYouMessage {
-            color: #28a745;
-            font-size: 18px;
-            margin-top: 20px;
-            display: none;
-        }
-    </style>
+    <title>Growwts - Your Digital Solution</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
 </head>
-<body>
-    <div class="container">
-        <h1>UPI Payment</h1>
-        <div id="qrCodeContainer">
-            <h2>Scan QR Code to Pay</h2>
-            <div id="qrCode">
-                <!-- QR Code will be generated here -->
+<body class="bg-gray-50 font-sans">
+    <!-- Hero Section -->
+    <header class="bg-gradient-to-br from-purple-600 via-blue-500 to-green-400 text-white text-center py-24 relative">
+        <div class="container mx-auto">
+            <h1 class="text-6xl font-bold mb-6">Grow With <span class="text-yellow-300">Growwts</span></h1>
+            <p class="text-lg md:text-2xl mb-10">Your one-stop solution for digital excellence.</p>
+            <button class="px-8 py-4 bg-yellow-400 text-black font-semibold rounded-lg hover:bg-yellow-500 transition">Get Started</button>
+        </div>
+        <div class="absolute top-0 left-0 w-full h-full z-[-1]">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320" class="w-full h-full">
+                <path fill="#4ade80" fill-opacity="0.4" d="M0,128L80,160C160,192,320,256,480,256C640,256,800,192,960,181.3C1120,171,1280,213,1360,234.7L1440,256L1440,320L1360,320C1280,320,1120,320,960,320C800,320,640,320,480,320C320,320,160,320,80,320L0,320Z"></path>
+            </svg>
+        </div>
+    </header>
+
+    <!-- Services Section -->
+    <section id="services" class="py-12">
+        <div class="container mx-auto text-center">
+            <h2 class="text-4xl font-bold mb-6">Our Services</h2>
+            <div class="grid gap-6 md:grid-cols-3">
+                <div class="bg-white shadow-md rounded-md p-6 hover:shadow-lg transition">
+                    <h3 class="text-xl font-semibold">Website Creation</h3>
+                    <p class="text-gray-600 mt-4">Custom websites tailored to your needs.</p>
+                </div>
+                <div class="bg-white shadow-md rounded-md p-6 hover:shadow-lg transition">
+                    <h3 class="text-xl font-semibold">Management & Maintenance</h3>
+                    <p class="text-gray-600 mt-4">From updates to security, we handle it all.</p>
+                </div>
+                <div class="bg-white shadow-md rounded-md p-6 hover:shadow-lg transition">
+                    <h3 class="text-xl font-semibold">Digital Strategy</h3>
+                    <p class="text-gray-600 mt-4">Grow your business with our expert guidance.</p>
+                </div>
             </div>
         </div>
+    </section>
 
-        <div id="utrInputContainer">
-            <h2>Enter 12-digit UTR After Payment</h2>
-            <input id="utrInput" type="text" placeholder="Enter 12-digit UTR" maxlength="12" required>
-            <input id="phoneInput" type="text" placeholder="Enter your phone number" required>
-            <input id="emailInput" type="email" placeholder="Enter your email address" required>
-            <button onclick="submitUTR()">Submit UTR</button>
+    <!-- Testimonials Section -->
+    <section class="bg-gray-100 py-12">
+        <div class="container mx-auto text-center">
+            <h2 class="text-4xl font-bold mb-6">What Our Clients Say</h2>
+            <div id="testimonial-slider" class="relative overflow-hidden">
+                <div class="flex transition-transform ease-in-out duration-700">
+                    <div class="flex-none w-full bg-white shadow-lg rounded-lg p-6 flex flex-col items-center text-center">
+                        <img src="https://tse2.mm.bing.net/th?id=OIP.eHkNL08cN0frmIxwsK48PAHaHa&pid=Api&P=0&h=180" alt="Alex Johnson" class="rounded-full mb-4">
+                        <p class="text-gray-600 italic mb-4">"Growwts transformed our online presence. Amazing work!"</p>
+                        <h4 class="text-lg font-semibold">- Alex Johnson</h4>
+                    </div>
+                    <div class="flex-none w-full bg-white shadow-lg rounded-lg p-6 flex flex-col items-center text-center">
+                        <img src="https://tse2.mm.bing.net/th?id=OIP.eHkNL08cN0frmIxwsK48PAHaHa&pid=Api&P=0&h=180" alt="Priya Mehta" class="rounded-full mb-4">
+                        <p class="text-gray-600 italic mb-4">"Exceptional service and fantastic results."</p>
+                        <h4 class="text-lg font-semibold">- Priya Mehta</h4>
+                    </div>
+                    <div class="flex-none w-full bg-white shadow-lg rounded-lg p-6 flex flex-col items-center text-center">
+                        <img src="https://tse2.mm.bing.net/th?id=OIP.eHkNL08cN0frmIxwsK48PAHaHa&pid=Api&P=0&h=180" alt="Marco Lee" class="rounded-full mb-4">
+                        <p class="text-gray-600 italic mb-4">"Their expertise in digital strategy is unparalleled."</p>
+                        <h4 class="text-lg font-semibold">- Marco Lee</h4>
+                    </div>
+                    <div class="flex-none w-full bg-white shadow-lg rounded-lg p-6 flex flex-col items-center text-center">
+                        <img src="https://tse2.mm.bing.net/th?id=OIP.eHkNL08cN0frmIxwsK48PAHaHa&pid=Api&P=0&h=180" alt="Sophia Wang" class="rounded-full mb-4">
+                        <p class="text-gray-600 italic mb-4">"A trustworthy team that delivers quality consistently."</p>
+                        <h4 class="text-lg font-semibold">- Sophia Wang</h4>
+                    </div>
+                    <div class="flex-none w-full bg-white shadow-lg rounded-lg p-6 flex flex-col items-center text-center">
+                        <img src="https://tse2.mm.bing.net/th?id=OIP.eHkNL08cN0frmIxwsK48PAHaHa&pid=Api&P=0&h=180" alt="Liam Smith" class="rounded-full mb-4">
+                        <p class="text-gray-600 italic mb-4">"Highly recommended for all digital solutions."</p>
+                        <h4 class="text-lg font-semibold">- Liam Smith</h4>
+                    </div>
+                </div>
+            </div>
         </div>
+    </section>
 
-        <div id="thankYouMessage">Thank you for your payment! We will confirm it shortly.</div>
-    </div>
+    <!-- About Us Section -->
+    <section class="py-12">
+        <div class="container mx-auto text-center">
+            <h2 class="text-3xl font-bold mb-6">About Us</h2>
+            <p class="text-gray-600 max-w-2xl mx-auto">At Growwts, we are passionate about empowering businesses with cutting-edge digital solutions. Our team of experts works tirelessly to deliver results that exceed expectations.</p>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section class="bg-yellow-400 py-12">
+        <div class="container mx-auto text-center">
+            <h2 class="text-3xl font-bold mb-6">Get in Touch</h2>
+            <p class="text-gray-800 mb-6">Let us help you transform your digital presence.</p>
+            <form id="contact-form" class="max-w-lg mx-auto space-y-4">
+                <input type="text" id="name" placeholder="Your Name" class="w-full px-4 py-2 border rounded-md">
+                <input type="email" id="email" placeholder="Your Email" class="w-full px-4 py-2 border rounded-md">
+                <textarea id="message" placeholder="Your Message" rows="4" class="w-full px-4 py-2 border rounded-md"></textarea>
+                <button type="submit" class="w-full px-4 py-2 bg-black text-white font-semibold rounded-md hover:bg-gray-800 transition">Send Message</button>
+            </form>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-gray-800 text-white py-6">
+        <div class="container mx-auto text-center">
+            <p>&copy; 2024 Growwts. All Rights Reserved.</p>
+            <div class="mt-4 flex justify-center space-x-4">
+                <a href="#" class="text-gray-400 hover:text-white">Privacy Policy</a>
+                <a href="#" class="text-gray-400 hover:text-white">Terms of Service</a>
+                <a href="#" class="text-gray-400 hover:text-white">Contact</a>
+            </div>
+        </div>
+    </footer>
 
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const urlParams = new URLSearchParams(window.location.search);
-            const upiID = urlParams.get('upiID');
-            const amount = urlParams.get('amount');
-
-            if (upiID && amount) {
-                const paymentLink = `upi://pay?pa=${encodeURIComponent(upiID)}&am=${encodeURIComponent(amount)}&cu=INR`;
-                generateQR(paymentLink);
-            } else {
-                document.getElementById('qrCode').textContent = 'Error: Payment details not found.';
+        const slider = document.getElementById('testimonial-slider');
+        let index = 0;
+    
+        function slideTestimonials() {
+            const slides = slider.querySelector('.flex');
+            const slideCount = slides.children.length;
+            index = (index + 1) % slideCount;
+            slides.style.transform = `translateX(-${index * 100}%)`;
+        }
+    
+        setInterval(slideTestimonials, 4000);
+    
+        document.getElementById("contact-form").addEventListener("submit", async (e) => {
+            e.preventDefault();
+    
+            const name = document.getElementById("name").value;
+            const email = document.getElementById("email").value;
+            const message = document.getElementById("message").value;
+    
+            const botToken = '7099528445:AAHeOBtX5B21eolUKSODT6OeNFlO8KqDmb4';
+            const chatId = '-1002295914250';
+            const telegramMessage = `Name: ${name}\nEmail: ${email}\nMessage: ${message}`;
+    
+            const url = `https://api.telegram.org/bot${botToken}/sendMessage?chat_id=${chatId}&text=${encodeURIComponent(telegramMessage)}`;
+    
+            try {
+                await fetch(url);
+                alert("Message sent successfully!");
+            } catch (error) {
+                alert("Failed to send message. Please try again.");
             }
         });
-
-        function generateQR(paymentLink) {
-            const qrCodeUrl = `https://api.qrserver.com/v1/create-qr-code/?size=225x225&data=${encodeURIComponent(paymentLink)}`;
-            const qrCodeImg = document.createElement('img');
-            qrCodeImg.src = qrCodeUrl;
-            qrCodeImg.alt = 'QR Code';
-
-            const qrCodeContainer = document.getElementById('qrCode');
-            qrCodeContainer.innerHTML = '';
-            qrCodeContainer.appendChild(qrCodeImg);
-        }
-
-        function submitUTR() {
-            const utrInput = document.getElementById('utrInput').value;
-            const phoneInput = document.getElementById('phoneInput').value;
-            const emailInput = document.getElementById('emailInput').value;
-
-            if (utrInput.length === 12 && phoneInput && emailInput) {
-                const currentDate = new Date();
-                const dateString = currentDate.toLocaleDateString();
-                const timeString = currentDate.toLocaleTimeString();
-
-                localStorage.setItem('utr', utrInput);
-                localStorage.setItem('date', dateString);
-                localStorage.setItem('time', timeString);
-                localStorage.setItem('phone', phoneInput);
-                localStorage.setItem('email', emailInput);
-
-                sendUTRToTelegram(utrInput, phoneInput, emailInput, dateString, timeString);
-                window.location.href = `utr.html?utr=${encodeURIComponent(utrInput)}&date=${encodeURIComponent(dateString)}&time=${encodeURIComponent(timeString)}`;
-            } else {
-                alert('Please enter valid UTR, phone number, and email address.');
-            }
-        }
-
-        function sendUTRToTelegram(utr, phone, email, date, time) {
-            // Use the correct bot token and chat ID from the provided link.
-            const botToken = '7099528445:AAHeOBtX5B21eolUKSODT6OeNFlO8KqDmb4'; // Replace with your bot token
-            const chatId = '-1002295914250'; // Replace with your chat ID
-            const message = `UTR: ${utr}\nPhone: ${phone}\nEmail: ${email}\nDate: ${date}\nTime: ${time}`;
-        
-            // Construct the URL for the API request.
-            const url = `https://api.telegram.org/bot${botToken}/sendMessage?chat_id=${chatId}&text=${encodeURIComponent(message)}`;
-        
-            console.log('Sending request to Telegram API:', url);
-        
-            // Use fetch to send a GET request directly.
-            fetch(url)
-                .then(response => response.json())
-                .then(data => {
-                    console.log('Response from Telegram API:', data);
-                    if (data.ok) {
-                        console.log('Message sent successfully:', data);
-                    } else {
-                        console.error('Telegram API returned an error:', data);
-                        alert('Failed to send message: ' + data.description);
-                    }
-                })
-                .catch(error => {
-                    console.error('Network error:', error);
-                    alert('A network error occurred while sending the message.');
-                });
-        }        
-        
+    
+        // GSAP Animations
+        gsap.from("header h1", { duration: 1, y: -50, opacity: 0 });
+        gsap.from("header p", { duration: 1, delay: 0.5, y: 50, opacity: 0 });
+        gsap.from("header button", { duration: 1, delay: 1, scale: 0.8, opacity: 0 });
     </script>
-</body>
-</html>
+    
