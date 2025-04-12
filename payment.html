@@ -1,1 +1,49 @@
-down
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UPI Payment</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <h1>UPI Payment Gateway</h1>
+        </header>
+        <main>
+            <section id="qrCodeContainer" class="section">
+                <h2>Scan to Pay</h2>
+                <div id="qrCode" class="qr-code"></div>
+            </section>
+            <section id="paymentLinkContainer" class="section">
+                <h2>Payment Link</h2>
+                <button class="btn" onclick="showPaymentLink()">Generate Payment Link</button>
+                <p id="paymentLink" class="payment-link">https://example.com/payment</p>
+            </section>
+            <section id="paymentAppsContainer" class="section">
+                <h2>Pay Using Your Favorite App</h2>
+                <div class="payment-apps">
+                    <a href="#"><img src="images/bhim.svg" alt="BHIM"></a>
+                    <a href="#"><img src="images/phonepe.svg" alt="PhonePe"></a>
+                    <a href="#"><img src="images/paytm.svg" alt="Paytm"></a>
+                    <a href="#"><img src="images/gpay.svg" alt="GPay"></a>
+                    <a href="#"><img src="images/upi.svg" alt="UPI"></a>
+                </div>
+            </section>
+        </main>
+        <footer class="footer">
+            <p>&copy; 2024 UPI Payment Gateway</p>
+        </footer>
+    </div>
+
+    <script src="script.js"></script>
+    <script>
+        function showPaymentLink() {
+            const paymentLinkElement = document.getElementById('paymentLink');
+            paymentLinkElement.style.display = 'block';
+        }
+    </script>
+</body>
+</html>
