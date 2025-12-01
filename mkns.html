@@ -1,0 +1,505 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Pay with QR — Example Payment Page</title>
+  <style>
+    :root{
+      --bg:#0f1724;
+      --card:#0b1220;
+      --muted:#9aa4b2;
+      --accent:#06b6d4;
+      --success:#10b981;
+      --danger:#ef4444;
+      font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+    }
+    html,body{height:100%}
+    body{
+      margin:0;
+      background:
+        radial-gradient(1000px 500px at 10% 10%, rgba(6,182,212,0.06), transparent 8%),
+        radial-gradient(800px 400px at 90% 90%, rgba(16,185,129,0.03), transparent 6%),
+        var(--bg);
+      color:#e6eef6;
+      -webkit-font-smoothing:antialiased;
+      -moz-osx-font-smoothing:grayscale;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      padding:20px;
+    }
+
+    .wrap {
+      width:100%;
+      max-width:920px;
+      background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+      border:1px solid rgba(255,255,255,0.04);
+      border-radius:14px;
+      box-shadow: 0 10px 30px rgba(2,6,23,0.6);
+      display:grid;
+      grid-template-columns: 380px 1fr;
+      gap:24px;
+      padding:28px;
+    }
+
+    /* QR column */
+    .qr-col{
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+      gap:16px;
+    }
+    .qr-card{
+      background:linear-gradient(180deg, rgba(255,255,255,0.012), rgba(255,255,255,0.01));
+      border-radius:12px;
+      padding:18px;
+      display:flex;
+      flex-direction:column;
+      gap:12px;
+      align-items:center;
+      width:100%;
+    }
+    .qr-img{
+      width:280px;
+      height:280px;
+      background:#0a0f17;
+      border-radius:8px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      overflow:hidden;
+      box-shadow: 0 6px 20px rgba(2,6,23,0.6);
+      position:relative;
+    }
+    .qr-img img{width:100%;height:100%;object-fit:contain;display:block}
+
+    .controls{
+      display:flex;
+      gap:8px;
+      width:100%;
+      justify-content:center;
+      flex-wrap:wrap;
+    }
+    button, .link-btn{
+      background:transparent;
+      color:var(--accent);
+      border:1px solid rgba(6,182,212,0.12);
+      padding:8px 14px;
+      border-radius:8px;
+      cursor:pointer;
+      font-weight:600;
+      transition:all .12s ease;
+    }
+    button:hover{transform:translateY(-2px); box-shadow:0 6px 18px rgba(6,182,212,0.06)}
+    .secondary{color:var(--muted); border:1px solid rgba(255,255,255,0.03)}
+
+    /* Info column */
+    .info-col{
+      padding:8px 6px;
+      display:flex;
+      flex-direction:column;
+      gap:12px;
+    }
+    .title{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:12px;
+    }
+    .merchant{
+      display:flex;
+      gap:12px;
+      align-items:center;
+    }
+    .merchant .logo{
+      width:56px;height:56px;border-radius:10px;background:linear-gradient(135deg,var(--accent),#7c3aed);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:20px;color:#031019;
+    }
+    .meta{color:var(--muted);font-size:14px}
+    .box{
+      background:linear-gradient(180deg, rgba(255,255,255,0.006), rgba(255,255,255,0.008));
+      border-radius:10px;padding:14px;border:1px solid rgba(255,255,255,0.02);
+    }
+    .line{display:flex;justify-content:space-between;align-items:center;margin:6px 0}
+    .amount{font-size:28px;font-weight:700;color:#e7f8fb}
+    .small{font-size:13px;color:var(--muted)}
+
+    .status {
+      display:flex;
+      align-items:center;
+      gap:10px;
+      font-weight:700;
+    }
+    .badge {
+      padding:6px 10px;border-radius:999px;font-weight:700;font-size:13px;
+    }
+    .badge.pending{background:rgba(255,255,255,0.03); color:var(--muted);}
+    .badge.paid{background:rgba(16,185,129,0.12); color:var(--success); border:1px solid rgba(16,185,129,0.06)}
+    .badge.failed{background:rgba(239,68,68,0.06); color:var(--danger)}
+
+    .spinner{
+      width:14px;height:14px;border-radius:50%;border:2px solid rgba(255,255,255,0.06);border-top-color:var(--accent); animation:spin .9s linear infinite;
+    }
+    @keyframes spin{to{transform:rotate(360deg)}}
+
+    .actions{
+      display:flex;gap:8px;flex-wrap:wrap;margin-top:6px;
+    }
+    .note{color:var(--muted);font-size:13px}
+
+    /* responsive */
+    @media (max-width:880px){
+      .wrap{grid-template-columns:1fr; padding:18px}
+      .qr-img{width:220px;height:220px}
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap" role="main" aria-labelledby="title">
+    <div class="qr-col" aria-hidden="false">
+      <div class="qr-card box" role="region" aria-label="QR code to scan">
+        <div style="text-align:center">
+          <strong style="font-size:15px;display:block">Scan to pay</strong>
+          <div class="small meta" style="margin-top:6px">Open your banking app / UPI scanner and scan this QR</div>
+        </div>
+
+        <div class="qr-img" id="qrWrap">
+          <!-- QR image inserted by JS for download via canvas fallback -->
+          <img id="qrImage" alt="QR code for payment" src="https://pay-uy.vercel.app/img.jpeg" crossorigin="anonymous" />
+        </div>
+
+        <div class="controls" role="toolbar" aria-label="QR actions">
+          <button id="downloadBtn" title="Download QR">Download QR</button>
+          <button id="copyBtn" title="Copy payment link">Copy payment link</button>
+          <button id="printBtn" title="Print">Print</button>
+        </div>
+
+        <div class="note small">Tip: If your camera scans a link, tap it to complete payment in the app.</div>
+      </div>
+
+      <div style="width:100%; display:flex; justify-content:center;">
+        <div class="note small">Payment reference: <span id="refText" style="font-family:monospace;color:#c9eef6;margin-left:6px"></span></div>
+      </div>
+    </div>
+
+    <div class="info-col">
+      <div class="title">
+        <div>
+          <div class="merchant">
+            <div class="logo" aria-hidden="true">P</div>
+            <div>
+              <div style="font-weight:800;font-size:18px">Pay-UY Demo</div>
+              <div class="meta">Merchant: Demo Store · Order #{ }</div>
+            </div>
+          </div>
+        </div>
+        <div style="text-align:right">
+          <div class="meta" style="font-weight:700">Secure • Encrypted • No card data here</div>
+        </div>
+      </div>
+
+      <div class="box" aria-live="polite">
+        <div class="line">
+          <div class="small">Amount</div>
+          <div class="amount" id="amountText">₹499.00</div>
+        </div>
+        <div class="line">
+          <div class="small">Payer</div>
+          <div class="meta">Guest</div>
+        </div>
+        <div class="line" style="margin-top:8px">
+          <div class="status">
+            <div id="statusBadge" class="badge pending">Awaiting payment</div>
+            <div id="statusSpinner" class="spinner" aria-hidden="false"></div>
+          </div>
+          <div class="small" id="countdown">Expires in <strong id="timer">05:00</strong></div>
+        </div>
+
+        <div class="actions" style="margin-top:12px">
+          <button id="simulateBtn" class="secondary" title="Simulate payment (dev)">Simulate payment</button>
+          <button id="checkBtn" title="Check payment status">Check status</button>
+          <button id="cancelBtn" class="secondary" title="Cancel payment">Cancel</button>
+        </div>
+
+        <p class="note" style="margin-top:12px">If the payment doesn't reflect automatically, tap "Check status".</p>
+      </div>
+
+      <div class="box" style="margin-top:12px">
+        <div style="font-weight:700;margin-bottom:8px">Payment details</div>
+        <div class="small">Order ID: <span id="orderId" style="font-family:monospace"></span></div>
+        <div class="small">Method: <strong>QR / UPI</strong></div>
+        <div class="small" style="margin-top:6px">Status log:</div>
+        <pre id="log" style="background:transparent;border-radius:6px;padding:8px;font-size:13px;color:var(--muted);margin:6px 0 0;max-height:150px;overflow:auto">Initialized page...</pre>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    /*****************************************************************
+     * Complete working demo JS:
+     * - Uses the provided QR URL
+     * - Allows download via drawing into canvas (works around cross-origin)
+     * - Copies a generated payment URI to clipboard
+     * - Simulates periodic payment status checks and final success
+     *****************************************************************/
+
+    (function () {
+      // --- Config (you may replace these with real values in production) ---
+      const QR_URL = 'https://pay-uy.vercel.app/img.jpeg'; // user's URL
+      const ORDER_ID = 'ORD' + Date.now().toString(36).toUpperCase().slice(-8);
+      const PAYMENT_AMOUNT = (new URLSearchParams(location.search).get('amount')) || '499.00';
+      const CURRENCY = 'INR';
+      const EXPIRE_SECONDS = 60 * 5; // 5 minutes
+      const PAYMENT_URI = `upi://pay?pa=merchant@upi&pn=Demo%20Store&am=${encodeURIComponent(PAYMENT_AMOUNT)}&cu=${CURRENCY}&tn=Order%20${ORDER_ID}&tr=${ORDER_ID}`;
+
+      // --- Element refs ---
+      const qrImage = document.getElementById('qrImage');
+      const downloadBtn = document.getElementById('downloadBtn');
+      const copyBtn = document.getElementById('copyBtn');
+      const printBtn = document.getElementById('printBtn');
+      const refText = document.getElementById('refText');
+      const amountText = document.getElementById('amountText');
+      const orderIdEl = document.getElementById('orderId');
+      const logEl = document.getElementById('log');
+      const simulateBtn = document.getElementById('simulateBtn');
+      const checkBtn = document.getElementById('checkBtn');
+      const cancelBtn = document.getElementById('cancelBtn');
+      const statusBadge = document.getElementById('statusBadge');
+      const statusSpinner = document.getElementById('statusSpinner');
+      const timerEl = document.getElementById('timer');
+
+      // initial UI
+      orderIdEl.textContent = ORDER_ID;
+      refText.textContent = ORDER_ID;
+      amountText.textContent = `₹${parseFloat(PAYMENT_AMOUNT).toFixed(2)}`;
+      log('Page loaded. QR from: ' + QR_URL);
+
+      // countdown timer
+      let remaining = EXPIRE_SECONDS;
+      let paid = false;
+      const tickInterval = setInterval(() => {
+        if (paid) { clearInterval(tickInterval); return; }
+        remaining--;
+        if (remaining <= 0) {
+          timerEl.textContent = '00:00';
+          onExpired();
+          clearInterval(tickInterval);
+          return;
+        }
+        timerEl.textContent = formatTime(remaining);
+      }, 1000);
+      timerEl.textContent = formatTime(remaining);
+
+      function formatTime(s) {
+        const mm = Math.floor(s/60).toString().padStart(2,'0');
+        const ss = (s%60).toString().padStart(2,'0');
+        return `${mm}:${ss}`;
+      }
+
+      // download QR: draw to canvas to allow download even for CORS images where fetch might be blocked.
+      downloadBtn.addEventListener('click', async () => {
+        log('Download requested');
+        try {
+          await downloadImageFromElement(qrImage, `qr-${ORDER_ID}.png`);
+          log('QR downloaded');
+        } catch (e) {
+          log('Download failed: ' + (e && e.message ? e.message : e));
+          alert('Could not download image (CORS). Open image in new tab and save it manually.');
+          window.open(QR_URL, '_blank');
+        }
+      });
+
+      // copy payment URI (useful for apps that accept a URI)
+      copyBtn.addEventListener('click', async () => {
+        try {
+          await navigator.clipboard.writeText(PAYMENT_URI);
+          log('Payment URI copied to clipboard: ' + PAYMENT_URI);
+          copyBtn.textContent = 'Copied ✓';
+          setTimeout(()=> copyBtn.textContent = 'Copy payment link', 2000);
+        } catch (e) {
+          log('Copy failed: ' + e);
+          alert('Clipboard copy failed. Please copy manually:\n\n' + PAYMENT_URI);
+        }
+      });
+
+      // print the QR area
+      printBtn.addEventListener('click', () => {
+        window.print();
+      });
+
+      // simulate payment (for dev/testing)
+      simulateBtn.addEventListener('click', () => {
+        log('Simulate payment clicked — will mark as PAID after 3s');
+        setTimeout(() => {
+          markPaid({method:'Simulated', txnId: 'SIM' + Date.now()});
+        }, 3000);
+      });
+
+      // check status (manual)
+      checkBtn.addEventListener('click', () => {
+        log('Manual check status requested...');
+        checkStatus().then(state => {
+          log('Manual status: ' + state);
+          if (state === 'PAID') markPaid({method: 'Manual check', txnId: 'MAN' + Date.now()});
+          else if (state === 'EXPIRED') onExpired();
+          else alert('Status: ' + state);
+        });
+      });
+
+      // cancel
+      cancelBtn.addEventListener('click', () => {
+        if (!confirm('Cancel this payment?')) return;
+        markFailed('Cancelled by user');
+      });
+
+      // Simulated background poll (pretend we're querying a server every 4s)
+      let pollCount = 0;
+      const pollHandle = setInterval(() => {
+        if (paid) { clearInterval(pollHandle); return; }
+        pollCount++;
+        log('Polling payment status (attempt ' + pollCount + ')...');
+        // In a real integration: fetch('/api/payment-status?orderId=' + ORDER_ID)
+        // Here: randomly succeed around attempt 6
+        if (Math.random() < 0.08 && pollCount > 4) {
+          markPaid({method:'Auto-poll', txnId: 'AUTO' + Date.now()});
+          clearInterval(pollHandle);
+        } else {
+          // keep pending
+        }
+        if (pollCount >= 40) { // safety end
+          clearInterval(pollHandle);
+        }
+      }, 4000);
+
+      // ---------- helper functions ----------
+
+      function log(txt){
+        const now = new Date().toLocaleTimeString();
+        logEl.textContent = `[${now}] ${txt}\n` + logEl.textContent;
+      }
+
+      async function checkStatus(){
+        // simulated: returns PENDING / PAID / EXPIRED
+        if (paid) return 'PAID';
+        if (remaining <= 0) return 'EXPIRED';
+        return 'PENDING';
+      }
+
+      function markPaid(info){
+        if (paid) return;
+        paid = true;
+        statusBadge.className = 'badge paid';
+        statusBadge.textContent = 'Paid';
+        statusSpinner.style.display = 'none';
+        log('Payment confirmed — ' + JSON.stringify(info));
+        showSuccessModal(info);
+      }
+
+      function markFailed(reason){
+        if (paid) return;
+        paid = true;
+        statusBadge.className = 'badge failed';
+        statusBadge.textContent = 'Failed';
+        statusSpinner.style.display = 'none';
+        log('Payment failed: ' + reason);
+        alert('Payment cancelled / failed: ' + reason);
+      }
+
+      function onExpired(){
+        if (paid) return;
+        statusBadge.className = 'badge failed';
+        statusBadge.textContent = 'Expired';
+        statusSpinner.style.display = 'none';
+        log('Payment window expired.');
+        alert('Payment request expired. Please create a new payment to try again.');
+      }
+
+      function showSuccessModal(info){
+        // simple success visual
+        setTimeout(()=> {
+          const message = `Payment received!\nOrder ${ORDER_ID}\nAmount: ₹${parseFloat(PAYMENT_AMOUNT).toFixed(2)}\nTxn: ${info.txnId || '—'}`;
+          alert(message);
+        }, 200);
+      }
+
+      // draw image into canvas and download as PNG (works around CORS if image allows crossOrigin).
+      async function downloadImageFromElement(imgEl, filename){
+        // Create canvas sized to the image's displayed size
+        const w = imgEl.naturalWidth || imgEl.width || 800;
+        const h = imgEl.naturalHeight || imgEl.height || 800;
+        const canvas = document.createElement('canvas');
+        canvas.width = w;
+        canvas.height = h;
+        const ctx = canvas.getContext('2d');
+
+        // Try to load image as blob via fetch to properly set crossOrigin if possible
+        try {
+          const resp = await fetch(imgEl.src, {mode:'cors',cache:'no-store'});
+          if (!resp.ok) throw new Error('Network response not ok');
+          const blob = await resp.blob();
+          // create an image from blob
+          const img = await createImageBitmap(blob);
+          ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+        } catch (err) {
+          // fallback: attempt to draw directly (may taint canvas if cross-origin)
+          await new Promise((res, rej) => {
+            const i = new Image();
+            i.crossOrigin = 'anonymous';
+            i.onload = () => { try { ctx.drawImage(i,0,0,canvas.width,canvas.height); res(); } catch(e){ rej(e); } };
+            i.onerror = (e) => rej(e);
+            i.src = imgEl.src;
+          });
+        }
+
+        // convert to blob and trigger download
+        return new Promise((resolve, reject) => {
+          canvas.toBlob(blob => {
+            if (!blob) return reject(new Error('Failed to create blob'));
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = filename || 'qr.png';
+            document.body.appendChild(a);
+            a.click();
+            a.remove();
+            setTimeout(()=> URL.revokeObjectURL(url), 3000);
+            resolve();
+          }, 'image/png');
+        });
+      }
+
+      // createImageBitmap fallback for older browsers
+      async function createImageBitmap(blob){
+        if (window.createImageBitmap) return await window.createImageBitmap(blob);
+        // fallback: load as dataURL
+        return new Promise((res, rej) => {
+          const fr = new FileReader();
+          fr.onload = () => {
+            const i = new Image();
+            i.onload = () => res(i);
+            i.onerror = rej;
+            i.src = fr.result;
+          };
+          fr.onerror = rej;
+          fr.readAsDataURL(blob);
+        });
+      }
+
+      // expose a small console for debugging (optional)
+      window._paymentPage = {
+        ORDER_ID, PAYMENT_URI, markPaid, markFailed
+      };
+
+      // Preload the QR image (helpful to ensure canvas draw later)
+      (function preload(){
+        const i = new Image();
+        i.crossOrigin = 'anonymous';
+        i.onload = () => log('QR image loaded (preload)');
+        i.onerror = () => log('QR preload failed (CORS?) — download fallback will open image in new tab.');
+        i.src = QR_URL;
+      })();
+
+    })();
+  </script>
+</body>
+</html>
